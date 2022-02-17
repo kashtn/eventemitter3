@@ -12,19 +12,19 @@ declare class EventEmitter<
    * Return an array listing the events for which the emitter has registered
    * listeners.
    */
-  eventNames(): Array<EventEmitter.EventNames<EventTypes>>;
+  getEventNames(): Array<EventEmitter.EventNames<EventTypes>>;
 
   /**
    * Return the listeners registered for a given event.
    */
-  listeners<T extends EventEmitter.EventNames<EventTypes>>(
+  getListeners<T extends EventEmitter.EventNames<EventTypes>>(
     event: T
   ): Array<EventEmitter.EventListener<EventTypes, T>>;
 
   /**
    * Return the number of listeners listening to a given event.
    */
-  listenerCount(event: EventEmitter.EventNames<EventTypes>): number;
+  getListenerCount(event: EventEmitter.EventNames<EventTypes>): number;
 
   /**
    * Calls each of the listeners registered for a given event.
