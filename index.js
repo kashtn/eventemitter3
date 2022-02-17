@@ -244,7 +244,7 @@ EventEmitter.prototype.removeListener = function removeListener(
   }
 
   let listeners = this._events[eventName];
-
+  let events = [];
   if (listeners.callback) {
     if (
       listeners.callback === callback &&
@@ -254,7 +254,7 @@ EventEmitter.prototype.removeListener = function removeListener(
       clearEvent(this, eventName);
     }
   } else {
-    for (let i = 0, events = [], length = listeners.length; i < length; i++) {
+    for (let i = 0; i < listeners.length; i++) {
       if (
         listeners[i].callback !== callback ||
         (once && !listeners[i].once) ||
