@@ -151,11 +151,11 @@ EventEmitter.prototype.getListeners = function getListeners(event) {
  */
 EventEmitter.prototype.getListenerCount = function getListenerCount(event) {
   let eventName = prefix ? prefix + event : event,
-    listeners = this._events[eventName];
+    currentListeners = this._events[eventName];
 
-  if (!listeners) return 0;
-  if (listeners.callback) return 1;
-  return listeners.length;
+  if (!currentListeners) return 0;
+  if (currentListeners.callback) return 1;
+  return currentListeners.length;
 };
 
 /**
@@ -175,18 +175,23 @@ EventEmitter.prototype.emit = function emit(event, ...args) {
   //if there is only one listener
   if (currentListeners.callback) {
     if (currentListeners.once) {
-      this.removeListener(event, listeners.callback, undefined, true);
+      this.removeListener(event, currentListeners.callback, undefined, true);
     }
 
-    currentListeners.callback.apply(listeners.context, args);
+    currentListeners.callback.apply(currentListeners.context, args);
   } else {
-    let length = listeners.length;
+    let length = currentListeners.length;
 
     for (let i = 0; i < length; i++) {
       if (listeners[i].once) {
-        this.removeListener(event, listeners[i].callback, undefined, true);
+        this.removeListener(
+          event,
+          currentListeners[i].callback,
+          undefined,
+          true
+        );
       }
-      listeners[i].callback.apply(listeners[i].context, args);
+      currentListeners[i].callback.apply(currentListeners[i].context, args);
     }
   }
 
@@ -243,24 +248,24 @@ EventEmitter.prototype.removeListener = function removeListener(
     return this;
   }
 
-  let listeners = this._events[eventName];
+  let currentListeners = this._events[eventName];
   let events = [];
-  if (listeners.callback) {
+  if (currentListeners.callback) {
     if (
-      listeners.callback === callback &&
-      (!once || listeners.once) &&
-      (!context || listeners.context === context)
+      currentListeners.callback === callback &&
+      (!once || currentListeners.once) &&
+      (!context || currentListeners.context === context)
     ) {
       clearEvent(this, eventName);
     }
   } else {
-    for (let i = 0; i < listeners.length; i++) {
+    for (let i = 0; i < currentListeners.length; i++) {
       if (
-        listeners[i].callback !== callback ||
-        (once && !listeners[i].once) ||
-        (context && listeners[i].context !== context)
+        currentListeners[i].callback !== callback ||
+        (once && !currentListeners[i].once) ||
+        (context && currentListeners[i].context !== context)
       ) {
-        events.push(listeners[i]);
+        events.push(currentListeners[i]);
       }
     }
 
