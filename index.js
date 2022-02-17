@@ -183,7 +183,7 @@ EventEmitter.prototype.emit = function emit(event, ...args) {
     let length = currentListeners.length;
 
     for (let i = 0; i < length; i++) {
-      if (listeners[i].once) {
+      if (currentListeners[i].once) {
         this.removeListener(
           event,
           currentListeners[i].callback,
