@@ -165,7 +165,7 @@ EventEmitter.prototype.getListenerCount = function getListenerCount(event) {
  * @returns {Boolean} `true` if the event had listeners, else `false`.
  * @public
  */
-EventEmitter.prototype.emit = function emit(event, ...args) {
+EventEmitter.prototype.emit = function emit(event, context, ...args) {
   let eventName = prefix ? prefix + event : event;
 
   if (!this._events[eventName]) return false;
@@ -178,7 +178,7 @@ EventEmitter.prototype.emit = function emit(event, ...args) {
       this.removeListener(event, currentListeners.callback, undefined, true);
     }
 
-    currentListeners.callback.apply(currentListeners.context, args);
+    currentListeners.callback.apply(context || currentListeners.context, args);
   } else {
     let length = currentListeners.length;
 
@@ -191,7 +191,7 @@ EventEmitter.prototype.emit = function emit(event, ...args) {
           true
         );
       }
-      currentListeners[i].callback.apply(currentListeners[i].context, args);
+      currentListeners[i].callback.apply(context || currentListeners[i].context, args);
     }
   }
 
