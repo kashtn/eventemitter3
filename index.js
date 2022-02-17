@@ -134,8 +134,8 @@ EventEmitter.prototype.getListeners = function getListeners(event) {
 
   if (!handlers) return [];
   if (handlers.callback) return [handlers.callback];
-
-  for (let i = 0, l = handlers.length, listeners = new Array(l); i < l; i++) {
+  let listeners = new Array(handlers.length)
+  for (let i = 0; i < l; i++) {
     listeners[i] = handlers[i].callback;
   }
 
