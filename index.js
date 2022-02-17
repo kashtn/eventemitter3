@@ -180,8 +180,7 @@ EventEmitter.prototype.emit = function emit(event, ...args) {
 
     currentListeners.callback.apply(listeners.context, args);
   } else {
-    let length = listeners.length,
-      j;
+    let length = listeners.length;
 
     for (i = 0; i < length; i++) {
       if (listeners[i].once) {
